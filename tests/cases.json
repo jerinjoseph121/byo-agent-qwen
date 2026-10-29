@@ -1,0 +1,860 @@
+[
+  {
+    "name": "create_basic",
+    "prompt": "Create foo.txt inside the abc directory. The file should contain: foo",
+    "expect_files": {
+      "abc/foo.txt": "foo"
+    }
+  },
+  {
+    "name": "create_single_line",
+    "prompt": "In folder1, make a file named bar.txt containing the single line hello world.",
+    "expect_files": {
+      "folder1/bar.txt": "hello world"
+    }
+  },
+  {
+    "name": "create_quoted",
+    "prompt": "Write \"Meeting moved to Friday at 3 PM.\" to announcements/update.txt.",
+    "expect_files": {
+      "announcements/update.txt": "Meeting moved to Friday at 3 PM."
+    }
+  },
+  {
+    "name": "create_empty",
+    "prompt": "Make an empty file named ready.flag in the current directory.",
+    "files": {
+      "existing.txt": "do not touch\n"
+    },
+    "expect_files": {
+      "ready.flag": ""
+    }
+  },
+  {
+    "name": "create_multiline",
+    "prompt": "I want you to create data/colors.txt with these three lines in this order: red, green, blue.",
+    "expect_files": {
+      "data/colors.txt": "red\ngreen\nblue"
+    }
+  },
+  {
+    "name": "create_nested_unicode",
+    "prompt": "Create a/b/c/café.txt containing the text: Naïve résumé, ok",
+    "expect_files": {
+      "a/b/c/café.txt": "Naïve résumé, ok"
+    }
+  },
+  {
+    "name": "delete_basic",
+    "prompt": "Delete notes/old-draft.txt.",
+    "files": {
+      "notes/old-draft.txt": "old\n",
+      "notes/final.txt": "final\n"
+    },
+    "expect_absent": [
+      "notes/old-draft.txt"
+    ],
+    "expect_dirs": [
+      "notes"
+    ]
+  },
+  {
+    "name": "delete_remove_wording",
+    "prompt": "Remove temporary/cache.txt.",
+    "files": {
+      "temporary/cache.txt": "x\n",
+      "temporary/keep.txt": "y\n"
+    },
+    "expect_absent": [
+      "temporary/cache.txt"
+    ]
+  },
+  {
+    "name": "delete_casual",
+    "prompt": "I no longer need todo-old.md. Delete it.",
+    "files": {
+      "todo-old.md": "- a\n",
+      "todo.md": "- b\n"
+    },
+    "expect_absent": [
+      "todo-old.md"
+    ]
+  },
+  {
+    "name": "delete_keep_siblings",
+    "prompt": "Delete archive/2024/january.log, but leave the other log files unchanged.",
+    "files": {
+      "archive/2024/january.log": "j\n",
+      "archive/2024/february.log": "f\n",
+      "archive/2023/december.log": "d\n"
+    },
+    "expect_absent": [
+      "archive/2024/january.log"
+    ],
+    "expect_dirs": [
+      "archive/2024"
+    ]
+  },
+  {
+    "name": "delete_described",
+    "prompt": "Please get rid of the file named duplicate.csv in the records directory.",
+    "files": {
+      "records/duplicate.csv": "a,b\n",
+      "records/main.csv": "a,b\n",
+      "duplicate.csv": "root copy\n"
+    },
+    "expect_absent": [
+      "records/duplicate.csv"
+    ]
+  },
+  {
+    "name": "delete_only_dir_file",
+    "prompt": "Delete only/lonely.txt.",
+    "files": {
+      "only/lonely.txt": "bye\n"
+    },
+    "expect_absent": [
+      "only/lonely.txt"
+    ],
+    "expect_dirs": [
+      "only"
+    ]
+  },
+  {
+    "name": "delete_space_in_name",
+    "prompt": "Delete the file \"reports/draft v2.txt\".",
+    "files": {
+      "reports/draft v2.txt": "draft\n",
+      "reports/final.txt": "final\n"
+    },
+    "expect_absent": [
+      "reports/draft v2.txt"
+    ],
+    "expect_dirs": [
+      "reports"
+    ]
+  },
+  {
+    "name": "read_inventory",
+    "prompt": "Read inventory.txt. How many blue notebooks are currently in stock?",
+    "files": {
+      "inventory.txt": "Blue notebooks: 12\nRed notebooks: 7\n"
+    },
+    "answer_contains": [
+      "12"
+    ]
+  },
+  {
+    "name": "read_schedule",
+    "prompt": "According to schedule.txt, what date is the final presentation?",
+    "files": {
+      "schedule.txt": "Week 1 (Sept 8): Kickoff\nMidterm check-in: October 20, 2026\nFinal presentation: December 9, 2026\nReport due: December 14, 2026\n"
+    },
+    "answer_contains": [
+      "December 9"
+    ]
+  },
+  {
+    "name": "read_policy_two_facts",
+    "prompt": "Based on policy.txt, who is eligible for reimbursement and what is the submission deadline?",
+    "files": {
+      "policy.txt": "Travel Reimbursement Policy\nOnly full-time graduate students presenting a paper are eligible for reimbursement.\nReceipts must be submitted within 30 days of the trip.\nThe maximum amount is $500.\n"
+    },
+    "answer_contains": [
+      "full-time graduate students",
+      "30 days"
+    ]
+  },
+  {
+    "name": "read_experiment",
+    "prompt": "Read experiment.md and report the test accuracy and the size of the test set.",
+    "files": {
+      "experiment.md": "# Run 7\n\n- Train size: 48,000\n- Validation accuracy: 91.2%\n- Test set size: 10,000 images\n- Test accuracy: 89.4%\n"
+    },
+    "answer_contains": [
+      "89.4",
+      "10,000"
+    ]
+  },
+  {
+    "name": "read_meeting",
+    "prompt": "According to meeting_notes.txt, who is responsible for the deployment and when is it due?",
+    "files": {
+      "meeting_notes.txt": "Attendees: Priya, Marcus, Chen\nAction items:\n- Marcus: update the docs by Oct 3\n- Chen: handle the production deployment, due Friday, October 9\n- Priya: review the budget\n"
+    },
+    "answer_contains": [
+      "Chen",
+      "October 9"
+    ]
+  },
+  {
+    "name": "read_missing_file",
+    "prompt": "According to schedule.txt, what date is the final presentation?",
+    "files": {
+      "other.txt": "nothing here\n"
+    },
+    "status": "error"
+  },
+  {
+    "name": "summary_incident",
+    "prompt": "Use logs/start.txt, logs/update.txt, and logs/resolution.txt to create reports/incident_summary.txt containing a summary with less than 100 words of the incident timeline, its cause, and its resolution.",
+    "files": {
+      "logs/start.txt": "2026-09-14 09:02 Alerts fired: checkout API error rate rose to 38%.\n09:05 On-call engineer Dana acknowledged the page.\n09:11 Customers reported failed payments on the web store.\n",
+      "logs/update.txt": "09:25 Investigation found the payments service could not reach the database.\n09:31 Root cause identified: a config deploy at 08:58 changed the database connection pool size from 50 to 5, exhausting connections.\n",
+      "logs/resolution.txt": "09:40 Config rolled back to pool size 50.\n09:44 Error rate returned to normal (<0.5%).\n10:30 Postmortem scheduled; a config validation check will be added to the deploy pipeline.\n"
+    },
+    "summary_file": "reports/incident_summary.txt",
+    "max_words": 100,
+    "summary_contains": [
+      "9:02",
+      "pool",
+      "roll"
+    ]
+  },
+  {
+    "name": "summary_existing_dir",
+    "prompt": "Read notes/mon.txt and notes/tue.txt and write a summary of what the team finished, in under 50 words, to notes/summary.txt.",
+    "files": {
+      "notes/mon.txt": "Monday: finished the login page and fixed two CSS bugs.\n",
+      "notes/tue.txt": "Tuesday: finished the signup API and wrote unit tests for it.\n"
+    },
+    "summary_file": "notes/summary.txt",
+    "max_words": 50,
+    "summary_contains": [
+      "login",
+      "sign"
+    ]
+  },
+  {
+    "name": "summary_release_notes",
+    "prompt": "Combine release/backend.md and release/frontend.md into a summary of no more than 80 words saved to release/summary.txt. Mention the version number and the main change in each area.",
+    "files": {
+      "release/backend.md": "# Backend changes for v2.3.0\n\n- Added rate limiting to the public API (100 requests per minute per key).\n- Fixed a bug where password reset emails were sent twice.\n",
+      "release/frontend.md": "# Frontend changes for v2.3.0\n\n- New dark mode setting on the profile page.\n- The dashboard now loads about 40% faster.\n"
+    },
+    "summary_file": "release/summary.txt",
+    "max_words": 80,
+    "summary_contains": [
+      "2.3.0",
+      "rate limit",
+      "dark mode"
+    ]
+  },
+  {
+    "name": "csv_total_column",
+    "files": {
+      "inventory.csv": "item,color,quantity\nnotebook,blue,12\nnotebook,red,7\npen,black,23\n"
+    },
+    "turns": [
+      {
+        "session": "5101",
+        "prompt": "Read inventory.csv and tell me the total of the quantity column.",
+        "answer_contains": [
+          "42"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "csv_average_decimals",
+    "files": {
+      "prices.csv": "product,price\nA,10.5\nB,20\nC,30.25\n"
+    },
+    "turns": [
+      {
+        "session": "5102",
+        "prompt": "What is the average price in prices.csv?",
+        "answer_contains": [
+          "20.25"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "csv_row_sum",
+    "files": {
+      "candidates.csv": "id,name,interview_score,test_score\n1,Ana,8.5,9\n2,Ben,7,6\n"
+    },
+    "turns": [
+      {
+        "session": "5103",
+        "prompt": "Read candidates.csv. For the row whose id is 1, add the values in the interview_score and test_score columns. What is the result?",
+        "answer_contains": [
+          "17.5"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "csv_read_value",
+    "files": {
+      "employees.csv": "id,name,department,salary\n1,Ana,Sales,50000\n2,Ben,Engineering,72000\n3,Cal,Marketing,61000\n"
+    },
+    "turns": [
+      {
+        "session": "5104",
+        "prompt": "In employees.csv, which department does the employee with id 3 work in?",
+        "answer_contains": [
+          "Marketing"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "csv_update_value_new_file",
+    "files": {
+      "records.csv": "id,name,status\n101,Alpha,pending\n104,Delta,in progress\n107,Golf,pending\n"
+    },
+    "turns": [
+      {
+        "session": "5105",
+        "prompt": "In records.csv, change the status of the row with ID 104 to complete, and save the result as updated_records.csv."
+      }
+    ],
+    "expect_csv": {
+      "updated_records.csv": [
+        [
+          "id",
+          "name",
+          "status"
+        ],
+        [
+          "101",
+          "Alpha",
+          "pending"
+        ],
+        [
+          "104",
+          "Delta",
+          "complete"
+        ],
+        [
+          "107",
+          "Golf",
+          "pending"
+        ]
+      ]
+    }
+  },
+  {
+    "name": "csv_update_value_in_place",
+    "files": {
+      "tasks.csv": "task_id,title,owner\nT-1,Design,Lee\nT-2,Build,Sam\nT-3,Test,Lee\n"
+    },
+    "turns": [
+      {
+        "session": "5106",
+        "prompt": "In tasks.csv, set the owner of task T-2 to Maria and save the file."
+      }
+    ],
+    "expect_csv": {
+      "tasks.csv": [
+        [
+          "task_id",
+          "title",
+          "owner"
+        ],
+        [
+          "T-1",
+          "Design",
+          "Lee"
+        ],
+        [
+          "T-2",
+          "Build",
+          "Maria"
+        ],
+        [
+          "T-3",
+          "Test",
+          "Lee"
+        ]
+      ]
+    }
+  },
+  {
+    "name": "csv_remove_rows",
+    "files": {
+      "orders.csv": "order_id,customer,status,amount\n1,Ana,shipped,20\n2,Ben,cancelled,35\n3,Cal,pending,15\n4,Dee,Cancelled,50\n5,Eve,shipped,40\n"
+    },
+    "turns": [
+      {
+        "session": "5107",
+        "prompt": "In orders.csv, remove every row whose status is cancelled, and save the result as active_orders.csv."
+      }
+    ],
+    "expect_csv": {
+      "active_orders.csv": [
+        [
+          "order_id",
+          "customer",
+          "status",
+          "amount"
+        ],
+        [
+          "1",
+          "Ana",
+          "shipped",
+          "20"
+        ],
+        [
+          "3",
+          "Cal",
+          "pending",
+          "15"
+        ],
+        [
+          "5",
+          "Eve",
+          "shipped",
+          "40"
+        ]
+      ]
+    }
+  },
+  {
+    "name": "csv_remove_rows_numeric",
+    "files": {
+      "scores.csv": "student,score\nAna,91\nBen,58\nCal,74\nDee,45\n"
+    },
+    "turns": [
+      {
+        "session": "5108",
+        "prompt": "Remove all rows from scores.csv where the score is below 60 and save it as passing.csv."
+      }
+    ],
+    "expect_csv": {
+      "passing.csv": [
+        [
+          "student",
+          "score"
+        ],
+        [
+          "Ana",
+          "91"
+        ],
+        [
+          "Cal",
+          "74"
+        ]
+      ]
+    }
+  },
+  {
+    "name": "session_sales_three_turns",
+    "files": {
+      "sales.csv": "month,revenue\nJanuary,120\nFebruary,180\n"
+    },
+    "turns": [
+      {
+        "session": "1001",
+        "prompt": "Read sales.csv and tell me the total of the revenue column.",
+        "answer_contains": [
+          "300"
+        ]
+      },
+      {
+        "session": "1001",
+        "prompt": "What is the average?",
+        "answer_contains": [
+          "150"
+        ]
+      },
+      {
+        "session": "1001",
+        "prompt": "Save a copy of the table as reports/sales_copy.csv."
+      }
+    ],
+    "expect_files": {
+      "reports/sales_copy.csv": "month,revenue\nJanuary,120\nFebruary,180\n"
+    }
+  },
+  {
+    "name": "session_chain_of_csv_edits",
+    "files": {
+      "orders.csv": "order_id,customer,status,amount\n1,Ana,shipped,20\n2,Ben,cancelled,35\n3,Cal,pending,15\n4,Dee,Cancelled,50\n5,Eve,shipped,40\n"
+    },
+    "turns": [
+      {
+        "session": "1002",
+        "prompt": "In orders.csv, remove every row whose status is cancelled, and save the result as active_orders.csv."
+      },
+      {
+        "session": "1002",
+        "prompt": "What is the total of the amount column in that new file?",
+        "answer_contains": [
+          "75"
+        ]
+      },
+      {
+        "session": "1002",
+        "prompt": "In that same file, change the status of order 3 to shipped and save it as final_orders.csv."
+      }
+    ],
+    "expect_csv": {
+      "active_orders.csv": [
+        [
+          "order_id",
+          "customer",
+          "status",
+          "amount"
+        ],
+        [
+          "1",
+          "Ana",
+          "shipped",
+          "20"
+        ],
+        [
+          "3",
+          "Cal",
+          "pending",
+          "15"
+        ],
+        [
+          "5",
+          "Eve",
+          "shipped",
+          "40"
+        ]
+      ],
+      "final_orders.csv": [
+        [
+          "order_id",
+          "customer",
+          "status",
+          "amount"
+        ],
+        [
+          "1",
+          "Ana",
+          "shipped",
+          "20"
+        ],
+        [
+          "3",
+          "Cal",
+          "shipped",
+          "15"
+        ],
+        [
+          "5",
+          "Eve",
+          "shipped",
+          "40"
+        ]
+      ]
+    }
+  },
+  {
+    "name": "session_uses_earlier_result",
+    "files": {
+      "sales.csv": "month,revenue\nJanuary,120\nFebruary,180\n"
+    },
+    "turns": [
+      {
+        "session": "1003",
+        "prompt": "Read sales.csv and tell me the total of the revenue column.",
+        "answer_contains": [
+          "300"
+        ]
+      },
+      {
+        "session": "1003",
+        "prompt": "Write that total, and nothing else, to summary/total.txt."
+      }
+    ],
+    "expect_files": {
+      "summary/total.txt": "300"
+    }
+  },
+  {
+    "name": "session_keeps_instruction",
+    "files": {
+      "inventory.csv": "item,color,quantity\nnotebook,blue,12\nnotebook,red,7\npen,black,23\n"
+    },
+    "turns": [
+      {
+        "session": "1004",
+        "prompt": "For the rest of this conversation, when I ask for a number, reply with only the number and no other words."
+      },
+      {
+        "session": "1004",
+        "prompt": "Read inventory.csv and tell me the total of the quantity column.",
+        "answer_equals": "42"
+      }
+    ]
+  },
+  {
+    "name": "session_isolation_same_workspace",
+    "files": {
+      "sales.csv": "month,revenue\nJanuary,120\nFebruary,180\n"
+    },
+    "turns": [
+      {
+        "session": "2001",
+        "prompt": "Read sales.csv and tell me the total of the revenue column.",
+        "answer_contains": [
+          "300"
+        ]
+      },
+      {
+        "session": "2001",
+        "prompt": "What is the average?",
+        "answer_contains": [
+          "150"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "session_isolation_separate_values",
+    "files": {
+      "a.csv": "item,qty\nx,4\ny,6\n",
+      "b.csv": "item,qty\nx,20\ny,30\n"
+    },
+    "turns": [
+      {
+        "session": "3001",
+        "prompt": "Read a.csv and tell me the total of the qty column.",
+        "answer_contains": [
+          "10"
+        ]
+      },
+      {
+        "session": "3002",
+        "prompt": "Read b.csv and tell me the total of the qty column.",
+        "answer_contains": [
+          "50"
+        ]
+      },
+      {
+        "session": "3001",
+        "prompt": "Which file did we look at, and what total did you find?",
+        "answer_contains": [
+          "a.csv",
+          "10"
+        ],
+        "answer_not_contains": [
+          "b.csv",
+          "50"
+        ]
+      },
+      {
+        "session": "3002",
+        "prompt": "Which file did we look at, and what total did you find?",
+        "answer_contains": [
+          "b.csv",
+          "50"
+        ],
+        "answer_not_contains": [
+          "a.csv"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "hidden_memory_across_turns",
+    "files": {
+      "unrelated/sentinel.bin": "sentinel-data\n"
+    },
+    "dirs": [
+      "unrelated/empty"
+    ],
+    "turns": [
+      {
+        "session": "6202",
+        "prompt": "Our meeting is in room 204, and Maya is the organizer. Remember these details."
+      },
+      {
+        "session": "6202",
+        "prompt": "The meeting starts at 10 AM. Remember that too."
+      },
+      {
+        "session": "6202",
+        "prompt": "What room is the meeting in, who is organizing it, and what time does it start?",
+        "answer_contains": [
+          "204",
+          "Maya",
+          "10"
+        ]
+      }
+    ],
+    "expect_dirs": [
+      "unrelated/empty"
+    ]
+  },
+  {
+    "name": "hidden_memory_correction",
+    "files": {
+      "unrelated/sentinel.bin": "sentinel-data\n"
+    },
+    "dirs": [
+      "unrelated/empty"
+    ],
+    "turns": [
+      {
+        "session": "6303",
+        "prompt": "My preferred drink is tea. Remember that."
+      },
+      {
+        "session": "6303",
+        "prompt": "Correction: my preferred drink is coffee now, replacing tea."
+      },
+      {
+        "session": "6303",
+        "prompt": "What is my current preferred drink?",
+        "answer_contains": [
+          "coffee"
+        ]
+      }
+    ],
+    "expect_dirs": [
+      "unrelated/empty"
+    ]
+  },
+  {
+    "name": "hidden_session_separation_after_update",
+    "files": {
+      "unrelated/sentinel.bin": "sentinel-data\n"
+    },
+    "dirs": [
+      "unrelated/empty"
+    ],
+    "turns": [
+      {
+        "session": "6506",
+        "prompt": "My meeting day is Tuesday. Remember it for this conversation."
+      },
+      {
+        "session": "6507",
+        "prompt": "My meeting day is Wednesday. Remember it for this conversation."
+      },
+      {
+        "session": "6506",
+        "prompt": "My meeting has moved to Friday. Replace the earlier day with Friday."
+      },
+      {
+        "session": "6507",
+        "prompt": "What is my current meeting day?",
+        "answer_contains": [
+          "Wednesday"
+        ],
+        "answer_not_contains": [
+          "Friday",
+          "Tuesday"
+        ]
+      },
+      {
+        "session": "6506",
+        "prompt": "What is my current meeting day?",
+        "answer_contains": [
+          "Friday"
+        ]
+      }
+    ],
+    "expect_dirs": [
+      "unrelated/empty"
+    ]
+  },
+  {
+    "name": "memory_recall_simple",
+    "files": {
+      "unrelated/sentinel.bin": "sentinel-data\n"
+    },
+    "turns": [
+      {
+        "session": "7101",
+        "prompt": "My favorite color is green. Please keep that in mind."
+      },
+      {
+        "session": "7101",
+        "prompt": "What is my favorite color?",
+        "answer_contains": [
+          "green"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "memory_session_separation",
+    "files": {
+      "unrelated/sentinel.bin": "sentinel-data\n"
+    },
+    "turns": [
+      {
+        "session": "7201",
+        "prompt": "My project code name is Falcon. Remember it."
+      },
+      {
+        "session": "7202",
+        "prompt": "My project code name is Orion. Remember it."
+      },
+      {
+        "session": "7201",
+        "prompt": "What is my project code name?",
+        "answer_contains": [
+          "Falcon"
+        ],
+        "answer_not_contains": [
+          "Orion"
+        ]
+      },
+      {
+        "session": "7202",
+        "prompt": "What is my project code name?",
+        "answer_contains": [
+          "Orion"
+        ],
+        "answer_not_contains": [
+          "Falcon"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "memory_then_file_task",
+    "files": {
+      "unrelated/sentinel.bin": "sentinel-data\n"
+    },
+    "turns": [
+      {
+        "session": "7301",
+        "prompt": "The client's name is Rivera Corp and the invoice number is INV-5521. Remember these."
+      },
+      {
+        "session": "7301",
+        "prompt": "Create notes/client.txt containing the client's name and the invoice number on two lines, name first."
+      }
+    ],
+    "expect_files": {
+      "notes/client.txt": "Rivera Corp\nINV-5521"
+    }
+  },
+  {
+    "name": "memory_mixed_with_csv",
+    "files": {
+      "sales.csv": "month,revenue\nJanuary,120\nFebruary,180\n"
+    },
+    "turns": [
+      {
+        "session": "7401",
+        "prompt": "I only care about the revenue column in sales.csv. Remember that."
+      },
+      {
+        "session": "7401",
+        "prompt": "What is the total of that column?",
+        "answer_contains": [
+          "300"
+        ]
+      },
+      {
+        "session": "7401",
+        "prompt": "And the average?",
+        "answer_contains": [
+          "150"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+# API keys and local settings
+keys.env
+*.env
+!keys.env.example
+
+# Python
+__pycache__/
+*.pyc
+
+# Session history written next to the agent when /tmp is not writable
+.sessions/
+
+# Output of the live test runner
+tests/live/requests/
+tests/live/results/
